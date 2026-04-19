@@ -1,4 +1,7 @@
-select * from company.emp_details;
+SELECT 
+    *
+FROM
+    company.emp_details;
 
 -- 01. List all employees who earn more than $70,000. Show first name, last name, and salary.
 SELECT 
@@ -78,8 +81,189 @@ WHERE
     
 -- 8. Find departments that have more than 4 employees. Show department_id and employee count.
 
-select department_id as DeptId, department_name as DeptName, count(empId) as EmpNum
-from emp_details
-group by department_id
-having count(empId) > 4
-order by count(empId) asc;
+SELECT 
+    department_id AS DeptId,
+    department_name AS DeptName,
+    COUNT(empId) AS EmpNum
+FROM
+    emp_details
+GROUP BY department_id
+HAVING COUNT(empId) > 4
+ORDER BY COUNT(empId) ASC;
+
+
+-- 9. Give a 5% salary increase to all employees in department 30.
+
+alter table employees
+add column IncSalary float (10,2) after salary;
+
+UPDATE employees 
+SET 
+    IncSalary = CASE
+        WHEN department_id = 30 THEN salary * 1.05
+        ELSE salary
+    END;
+
+SELECT 
+    *
+FROM
+    employees
+WHERE
+    department_id = 30;
+
+SELECT 
+    *
+FROM
+    emp_details;
+
+
+-- 10. Delete all employees who were hired before January 1, 2017.
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    date < '2017-01-01';
+
+CREATE TABLE emp_backup AS SELECT * FROM
+    employees;
+
+SELECT 
+    *
+FROM
+    emp_backup
+WHERE
+    hire_date < '2017-01-01';
+
+DELETE FROM employees 
+WHERE
+    hire_date < '2017-01-01';
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    date < '2017-01-01';
+    
+    
+-- 11. Display employees whose salary is between $55,000 and $85,000, sorted by salary ascending.
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    salary BETWEEN 55000 AND 85000
+ORDER BY salary ASC;
+
+-- 12. Find the average salary for each department. Show department_id and average salary (rounded to 2 decimals).
+
+SELECT 
+    department_id AS DeptId,
+    department_name AS DeptName,
+    ROUND(AVG(salary), 2) AS AvgSalary
+FROM
+    emp_details
+GROUP BY DeptId
+ORDER BY DeptId;
+
+-- 13. List employees whose first name ends with 'n' or 'a'. Show first name, last name, and phone number.
+
+SELECT 
+    FirstName, LastName, Phone
+FROM
+    emp_details
+WHERE
+    FirstName LIKE '%n'
+        OR FirstName LIKE '%a';
+        
+        
+-- 14. Show departments where the total salary cost is greater than $250,000. Display department_id and total salary.
+
+SELECT 
+    department_id AS DeptId, SUM(salary) AS TotalSalary
+FROM
+    emp_details
+GROUP BY DeptId
+HAVING TotalSalary > 250000;
+
+
+-- 15. Update the job title to 'Lead Software Engineer' for employee_id 105.
+
+
+SELECT 
+    empId, JobTitle
+FROM
+    emp_details;
+where empId = '105';
+
+-- 16. Find employees who do NOT earn any commission. Show first name, last name, and salary.
+
+SELECT 
+    FirstName, LastName, salary AS Salary, commission_pct
+FROM
+    emp_details
+WHERE
+    commission_pct IS NULL;
+
+-- 17. Display the 3 lowest-paid employees. Show first name, last name, and salary.
+
+SELECT 
+    FirstName, LastName, salary AS Salary
+FROM
+    emp_details
+ORDER BY salary ASC
+LIMIT 3;
+
+-- 18. Show departments where the minimum salary is below $45,000. Display department_id and minimum salary.
+
+SELECT 
+    department_id AS DeptId,
+    department_name AS DeptName,
+    MIN(salary) AS MinSalary
+FROM
+    emp_details
+GROUP BY DeptId
+HAVING MinSalary < 45000;
+
+-- 19. Update the phone number to '555-0000' for all employees in department 40.
+
+SELECT 
+    empId, department_id, department_name, Phone
+FROM
+    emp_details
+WHERE
+    department_id = '40';
+
+alter table employees
+add column updated_phone varchar(50) after phone_number;
+
+UPDATE employees 
+SET 
+    updated_phone = CASE
+        WHEN department_id = '40' THEN '555-0000'
+        ELSE phone_number
+    END;
+
+SELECT 
+    department_id, phone_number, updated_phone
+FROM
+    employees;
+
+-- 20. List employees whose hire date is in the year 2021 or 2022, sorted by last name alphabetically.
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    YEAR(date) IN (2021 , 2022)
+ORDER BY LastName ASC;
+    
+
+
+
+
+
