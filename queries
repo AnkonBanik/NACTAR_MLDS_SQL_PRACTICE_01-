@@ -1,11 +1,85 @@
-select * from company.employees;
+select * from company.emp_details;
 
 -- 01. List all employees who earn more than $70,000. Show first name, last name, and salary.
 SELECT 
-    first_name, last_name, salary
+    FirstName, LastName, salary
 FROM
-    employees
+    emp_details
 WHERE
     salary > 70000
 ORDER BY salary DESC;
 
+-- 02. Display employees hired after December 31, 2019, sorted by hire date (newest first).
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    date > '2019-12-31'
+ORDER BY date DESC;
+
+-- 3. Find all employees whose last name contains the letter 'e'. Show first name, last name, and email.
+
+SELECT 
+    FirstName, LastName, email
+FROM
+    emp_details
+WHERE
+    LastName LIKE '%e%';
+
+
+-- 4. Count how many employees work in department 20.
+
+SELECT 
+    COUNT(EmpId) AS Number
+FROM
+    emp_details
+WHERE
+    department_id = '20';
+
+
+-- 5. Show the highest, lowest, and average salary in the company.
+
+SELECT 
+    'Highest Salary', MAX(salary) AS value
+FROM
+    emp_details 
+UNION ALL SELECT 
+    'Lowest Salary', MIN(salary) AS value
+FROM
+    emp_details 
+UNION ALL SELECT 
+    'Average Salary', AVG(salary) AS value
+FROM
+    emp_details
+;
+
+
+-- 6. List employees with a commission percentage of 0.10 or higher. Sort by commission descending.
+
+SELECT 
+    *
+FROM
+    emp_details
+WHERE
+    commission_pct >= 0.10
+ORDER BY commission_pct DESC;
+
+-- 7. Display employees whose job title starts with 'Senior'. Show first name, last name, and job title.
+
+SELECT 
+    Firstname, LastName, JobTitle
+FROM
+    emp_details
+WHERE
+    JobTitle LIKE '%Senior%';
+
+    
+-- 8. Find departments that have more than 4 employees. Show department_id and employee count.
+
+select department_id as DeptId, department_name as DeptName, count(empId) as EmpNum
+from emp_details
+group by department_id
+having count(empId) > 4
+order by count(empId) asc;
