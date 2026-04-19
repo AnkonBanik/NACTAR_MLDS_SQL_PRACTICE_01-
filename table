@@ -65,6 +65,25 @@ NULL, 112, 40),
 (120, 'Evelyn', 'Gonzalez', 'evelyn.gonzalez@company.com', '555-1020', '2017-01-17', 'Executive
 Assistant', 60000.00, NULL, 107, 10);
 
+create table departments (
+	department_id INT primary key ,
+    department_name varchar(50),
+    location varchar(100),
+    manager_id int null
+    );
+
+INSERT INTO departments (department_id, department_name, location, manager_id) VALUES
+(10, 'Engineering', 'New York', 107),
+(20, 'Finance & Analytics', 'Chicago', 202),
+(30, 'Sales & Marketing', 'Los Angeles', 103),
+(40, 'Human Resources', 'Houston', 112);
+
+alter table company.employees
+add constraint fk_employee_department
+foreign key (department_id) References departments(department_id);
+
 
 -- Table View
 select * from company.employees;
+
+select * from company.departments;
