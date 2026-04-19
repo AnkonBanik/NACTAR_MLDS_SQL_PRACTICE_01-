@@ -1,0 +1,11 @@
+select * from company.employees;
+
+-- 01. List all employees who earn more than $70,000. Show first name, last name, and salary.
+SELECT 
+    first_name, last_name, salary
+FROM
+    employees
+WHERE
+    salary > 70000
+ORDER BY salary DESC;
+
